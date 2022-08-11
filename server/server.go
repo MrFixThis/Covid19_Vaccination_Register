@@ -8,7 +8,7 @@ import (
 )
 
 func InitializeServer(r *mux.Router) *http.Server {
-	s := &http.Server{
+	return &http.Server{
 		Addr:              "127.0.0.1:9000",
 		Handler:           r,
 		ReadTimeout:       15 * time.Second,
@@ -16,6 +16,6 @@ func InitializeServer(r *mux.Router) *http.Server {
 		WriteTimeout:      15 * time.Second,
 		IdleTimeout:       15 * time.Minute,
 	}
-
-	return s
+	// Read about all the field of the http.Server's fields, and the suggested
+	// values for each of them
 }
