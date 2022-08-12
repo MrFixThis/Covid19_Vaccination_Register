@@ -1,7 +1,7 @@
 package model
 
 type Establishment struct {
-	EstablishmentName string `gorm:"primarykey" json:"establishment_name"`
+	Name                string `gorm:"primarykey" json:"name"`
 	Operation
 	Adress              Address `gorm:"embedded;column:establishment_adress" json:"establishment_adress"`
 	ContactNumber       uint16  `json:"contact_number"`

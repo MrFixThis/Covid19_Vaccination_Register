@@ -1,8 +1,9 @@
 package model
 
+import "gorm.io/gorm"
+
 type Address struct {
-	AddressID        uint   `gorm:"primarykey" json:"address_id"`
-	Operation
+	gorm.Model
 	City             string `json:"city"`
 	NeighborhoodName string `json:"neighborhood_name"`
 	StreetName       string `json:"street_name"`

@@ -1,12 +1,15 @@
 package model
 
-import "time"
+import (
+	"time"
+
+	"gorm.io/gorm"
+)
 
 type VaccineCertificate struct {
-	VaccineCertificateId      uint          `gorm:"primaryKey" json:"vaccine_certificate_id"`
+	gorm.Model
 	VaccineName               Vaccine       `json:"vaccine_name"`
-	PatientId                 Patient       `json:"patient_id"`
-	NurseId                   Nurse         `json:"nurse_id"` // aply the associations concepts
+	NurseId                   Nurse         `json:"nurse_id"`
 	EstablishmentName         Establishment `json:"establishment_name"`
 	VaccineAplicationDate     time.Time     `json:"vaccine_aplication_date"`
 	NextVaccineAplicationDate time.Time     `json:"next_vaccine_aplication_date"`
