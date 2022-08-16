@@ -1,14 +1,17 @@
 package model
 
 import (
+	"time"
+
 	"gorm.io/gorm"
 )
 
 type Person struct {
 	gorm.Model
-	FirstName      string `json:"first_name"`
-	LastName       string `json:"last_name"`
-	Identification uint32 `json:"identification"`
-	PhoneNumber    uint32 `json:"phone_number"`
-	EmailAddress   string `json:"email_address"`
+	FirstName                    string    `json:"first_name"`
+	LastName                     string    `json:"last_name"`
+	IdentificationNumber         string    `json:"identification"`
+	IdentificationExpeditionDate time.Time `json:"identification_expedition_date"`
+	PhoneNumber                  string    `json:"phone_number"`
+	EmailAddress                 string    `json:"email_address"`
 }

@@ -1,6 +1,8 @@
 package main
 
+import "github.com/Covid19_Vaccination_Register/database"
+
 func main() {
-	// the only place where the parts of the program meets each other is here
-	// so be careful with the coupuling
+	db := database.ConnectDatabase()
+	database.MigrateSchema(db)
 }

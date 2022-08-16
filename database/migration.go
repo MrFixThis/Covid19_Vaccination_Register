@@ -7,6 +7,7 @@ import (
 
 func MigrateSchema(db *gorm.DB) {
 	db.AutoMigrate(
+		&model.Administrator{},
 		&model.Patient{},
 		&model.Nurse{},
 		&model.Establishment{},
@@ -14,4 +15,4 @@ func MigrateSchema(db *gorm.DB) {
 		&model.Vaccine{},
 		&model.VaccineCertificate{},
 	)
-} // read the doc to see if the are other ways to migrate the schema
+}
