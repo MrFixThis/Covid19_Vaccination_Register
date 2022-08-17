@@ -7,12 +7,12 @@ import (
 
 func MigrateSchema(db *gorm.DB) {
 	db.AutoMigrate(
-		&model.Administrator{},
+		&model.Address{},
+		&model.Establishment{},
 		&model.Patient{},
 		&model.Nurse{},
-		&model.Establishment{},
-		&model.Address{},
 		&model.Vaccine{},
+		&model.Administrator{},
 		&model.VaccineCertificate{},
 	)
 }

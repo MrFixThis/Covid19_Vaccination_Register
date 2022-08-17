@@ -2,6 +2,6 @@ package model
 
 type Patient struct {
 	Person
-	AddressID           uint                 `json:"address_id"`
-	VaccineCertificates []VaccineCertificate `json:"vaccine_certificates"`
+	AddressID           uint               `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL" json:"address_id"`
+	VaccineCertificate  VaccineCertificate `json:"vaccine_certificate"`
 }
