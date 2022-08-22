@@ -5,13 +5,14 @@ import (
 	"gorm.io/gorm"
 )
 
-func ConnectDatabase() *gorm.DB {
-	const dsn = "root:@BrysDB130502.@tcp(127.0.0.1:3306)/covid19_vaccine_register?charset=utf8mb4&parseTime=True&loc=Local"
+const dsn = "root:@BrysDB130502.@tcp(127.0.0.1:3306)/covid19_vaccine_register?charset=utf8mb4&parseTime=True&loc=Local"
 
-	// read the documentation to see the advanced db's connection configuration
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+func ConnectDatabase() *gorm.DB {
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
+		DisableForeignKeyConstraintWhenMigrating: true, // <- read more about this
+	})
 	if err != nil {
-		panic("could not connect to the database")
+		panic(err.Error())
 	}
 
 	return db

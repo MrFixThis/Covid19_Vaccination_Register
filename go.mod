@@ -3,8 +3,9 @@ module github.com/Covid19_Vaccination_Register
 go 1.18
 
 require (
-	gorm.io/driver/mysql v1.3.5
+	github.com/gorilla/mux v1.8.0
 	gorm.io/gorm v1.23.8
+	gorm.io/driver/mysql v1.3.5
 )
 
 require (
