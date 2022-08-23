@@ -5,8 +5,8 @@ import (
 	"gorm.io/gorm"
 )
 
-func MigrateSchema(db *gorm.DB) {
-	db.AutoMigrate(
+func MigrateSchema() {
+	DB.AutoMigrate(
 		&model.Address{},
 		&model.Address{},
 		&model.Vaccine{},

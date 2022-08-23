@@ -6,7 +6,7 @@ import (
 
 func main() {
 	db := database.ConnectDatabase()
-	database.MigrateSchema(db)
+	database.MigrateSchema()
 
 	// r := route.InitializeRoutes()
 	// s := server.InitializeServer(r)
