@@ -1,15 +1,18 @@
 package main
 
 import (
+	"log"
+
 	"github.com/Covid19_Vaccination_Register/database"
+	"github.com/Covid19_Vaccination_Register/route"
+	"github.com/Covid19_Vaccination_Register/server"
 )
 
 func main() {
-	db := database.ConnectDatabase()
-	database.MigrateSchema()
+	database.InitializeDatabase()
 
-	// r := route.InitializeRoutes()
-	// s := server.InitializeServer(r)
-	//
-	// log.Fatal(s.ListenAndServe())
+	r := route.InitializeRoutes()
+	srv := server.InitializeServer(r)
+
+	log.Fatal(srv.ListenAndServe())
 }

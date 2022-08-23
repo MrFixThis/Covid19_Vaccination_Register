@@ -2,10 +2,9 @@ package database
 
 import (
 	"github.com/Covid19_Vaccination_Register/model"
-	"gorm.io/gorm"
 )
 
-func MigrateSchema() {
+func migrateSchema() {
 	DB.AutoMigrate(
 		&model.Address{},
 		&model.Address{},

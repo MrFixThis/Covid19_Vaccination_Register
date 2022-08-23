@@ -7,57 +7,58 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// InitializeRoutes initializes the server's routes to handle the http requests
 func InitializeRoutes() *mux.Router {
 	r := mux.NewRouter()
-	p := r.PathPrefix("api/v1").Subrouter()
+	s := r.PathPrefix("api/v1").Subrouter()
 
 	// Address routes
-	s := p.PathPrefix("/addresss").Subrouter()
-	s.HandleFunc("", handler.CreateAddress).Methods(http.MethodPost)
-	s.HandleFunc("/{id:[0-9]+}", handler.GetAddress).Methods(http.MethodGet)
-	s.HandleFunc("/{id:[0-9]+}", handler.UpdateAddress).Methods(http.MethodPut)
-	s.HandleFunc("/{id:[0-9]+}", handler.DeleteAddress).Methods(http.MethodDelete)
-	s.HandleFunc("", handler.GetAddresses).Methods(http.MethodGet)
+	a := s.PathPrefix("/addresses").Subrouter()
+	a.HandleFunc("", handler.CreateAddress).Methods(http.MethodPost)
+	a.HandleFunc("/addresses/{id:[0-9]+}", handler.GetAddress).Methods(http.MethodGet)
+	a.HandleFunc("/addresses/{id:[0-9]+}", handler.UpdateAddress).Methods(http.MethodPut)
+	a.HandleFunc("/addresses/{id:[0-9]+}", handler.DeleteAddress).Methods(http.MethodDelete)
+	a.HandleFunc("/addresses/", handler.GetAddresses).Methods(http.MethodGet)
 
 	// Vaccine routes
-	s = p.PathPrefix("/vaccines").Subrouter()
-	s.HandleFunc("", handler.CreateVaccine).Methods(http.MethodPost)
-	s.HandleFunc("/{id:[0-9]+}", handler.GetVaccine).Methods(http.MethodGet)
-	s.HandleFunc("/{id:[0-9]+}", handler.UpdateVaccine).Methods(http.MethodPut)
-	s.HandleFunc("/{id:[0-9]+}", handler.DeleteVaccine).Methods(http.MethodDelete)
-	s.HandleFunc("", handler.GetVaccines).Methods(http.MethodGet)
+	v := s.PathPrefix("/vaccines").Subrouter()
+	v.HandleFunc("", handler.CreateVaccine).Methods(http.MethodPost)
+	v.HandleFunc("/{id:[0-9]+}", handler.GetVaccine).Methods(http.MethodGet)
+	v.HandleFunc("/{id:[0-9]+}", handler.UpdateVaccine).Methods(http.MethodPut)
+	v.HandleFunc("/{id:[0-9]+}", handler.DeleteVaccine).Methods(http.MethodDelete)
+	v.HandleFunc("", handler.GetVaccines).Methods(http.MethodGet)
 
 	// Patient routes
-	s = p.PathPrefix("/patients").Subrouter()
-	s.HandleFunc("", handler.CreatePatient).Methods(http.MethodPost)
-	s.HandleFunc("/{id:[0-9]+}", handler.GetPatient).Methods(http.MethodGet)
-	s.HandleFunc("/{id:[0-9]+}", handler.UpdatePatient).Methods(http.MethodPut)
-	s.HandleFunc("/{id:[0-9]+}", handler.DeletePatient).Methods(http.MethodDelete)
-	s.HandleFunc("", handler.GetPatients).Methods(http.MethodGet)
+	p := s.PathPrefix("/patients").Subrouter()
+	p.HandleFunc("", handler.CreatePatient).Methods(http.MethodPost)
+	p.HandleFunc("/{id:[0-9]+}", handler.GetPatient).Methods(http.MethodGet)
+	p.HandleFunc("/{id:[0-9]+}", handler.UpdatePatient).Methods(http.MethodPut)
+	p.HandleFunc("/{id:[0-9]+}", handler.DeletePatient).Methods(http.MethodDelete)
+	p.HandleFunc("", handler.GetPatients).Methods(http.MethodGet)
 
 	// Nurse routes
-	s = p.PathPrefix("/nurses").Subrouter()
-	s.HandleFunc("", handler.CreateNurse).Methods(http.MethodPost)
-	s.HandleFunc("/{id:[0-9]+}", handler.GetNurse).Methods(http.MethodGet)
-	s.HandleFunc("/{id:[0-9]+}", handler.UpdateNurse).Methods(http.MethodPut)
-	s.HandleFunc("/{id:[0-9]+}", handler.DeleteNurse).Methods(http.MethodDelete)
-	s.HandleFunc("", handler.GetNurses).Methods(http.MethodGet)
+	n := s.PathPrefix("/nurses").Subrouter()
+	n.HandleFunc("", handler.CreateNurse).Methods(http.MethodPost)
+	n.HandleFunc("/{id:[0-9]+}", handler.GetNurse).Methods(http.MethodGet)
+	n.HandleFunc("/{id:[0-9]+}", handler.UpdateNurse).Methods(http.MethodPut)
+	n.HandleFunc("/{id:[0-9]+}", handler.DeleteNurse).Methods(http.MethodDelete)
+	n.HandleFunc("", handler.GetNurses).Methods(http.MethodGet)
 
 	// Establishment routes
-	s = p.PathPrefix("/establishments").Subrouter()
-	s.HandleFunc("", handler.CreateEstablishment).Methods(http.MethodPost)
-	s.HandleFunc("/{id:[0-9]+}", handler.GetEstablishment).Methods(http.MethodGet)
-	s.HandleFunc("/{id:[0-9]+}", handler.UpdateEstablishment).Methods(http.MethodPut)
-	s.HandleFunc("/{id:[0-9]+}", handler.DeleteEstablishment).Methods(http.MethodDelete)
-	s.HandleFunc("", handler.GetEstablishments).Methods(http.MethodGet)
+	e := s.PathPrefix("/establishments").Subrouter()
+	e.HandleFunc("", handler.CreateEstablishment).Methods(http.MethodPost)
+	e.HandleFunc("/{id:[0-9]+}", handler.GetEstablishment).Methods(http.MethodGet)
+	e.HandleFunc("/{id:[0-9]+}", handler.UpdateEstablishment).Methods(http.MethodPut)
+	e.HandleFunc("/{id:[0-9]+}", handler.DeleteEstablishment).Methods(http.MethodDelete)
+	e.HandleFunc("", handler.GetEstablishments).Methods(http.MethodGet)
 
 	// Vaccine certificate routes
-	s = p.PathPrefix("/vaccine_certificate").Subrouter()
-	s.HandleFunc("", handler.CreateVaccineCertificate).Methods(http.MethodPost)
-	s.HandleFunc("/{id:[0-9]+}", handler.GetVaccineCertificate).Methods(http.MethodGet)
-	s.HandleFunc("/{id:[0-9]+}", handler.UpdateVaccineCertificate).Methods(http.MethodPut)
-	s.HandleFunc("/{id:[0-9]+}", handler.DeleteVaccineCertificate).Methods(http.MethodDelete)
-	s.HandleFunc("", handler.GetVaccineCertificates).Methods(http.MethodGet)
+	c := s.PathPrefix("/vaccine_certificate").Subrouter()
+	c.HandleFunc("", handler.CreateVaccineCertificate).Methods(http.MethodPost)
+	c.HandleFunc("/{id:[0-9]+}", handler.GetVaccineCertificate).Methods(http.MethodGet)
+	c.HandleFunc("/{id:[0-9]+}", handler.UpdateVaccineCertificate).Methods(http.MethodPut)
+	c.HandleFunc("/{id:[0-9]+}", handler.DeleteVaccineCertificate).Methods(http.MethodDelete)
+	c.HandleFunc("", handler.GetVaccineCertificates).Methods(http.MethodGet)
 
 	//TODO: See if it's necesary to implement the same with the administrators
 

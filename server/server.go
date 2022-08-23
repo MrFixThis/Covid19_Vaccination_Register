@@ -7,6 +7,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// InitializeServer initializes the server instance
 func InitializeServer(r *mux.Router) *http.Server {
 	return &http.Server{
 		Addr:              "127.0.0.1:9000",
