@@ -9,6 +9,6 @@ type Address struct {
 	StreetName       string        `json:"street_name"`
 	StreetNumber     string        `json:"street_number"`
 	CardinalLocation string        `json:"cardinal_location"`
-	PatientID        uint          `json:"patients"`
-	Establishment    Establishment `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;" json:"establishments"`
+	PatientID        uint          `json:"patient_id"`
+	Establishment    Establishment `json:"establishment"`
 }

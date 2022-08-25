@@ -7,12 +7,11 @@ import (
 func migrateSchema() {
 	DB.AutoMigrate(
 		&model.Address{},
-		&model.Address{},
 		&model.Vaccine{},
 		&model.Patient{},
 		&model.Nurse{},
 		&model.Establishment{},
-		&model.Administrator{},
 		&model.VaccineCertificate{},
+		&model.Administrator{},
 	)
 }

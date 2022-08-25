@@ -1,11 +1,91 @@
+#Address
+POST {{URL}}/addresses
+Content-Type: application/json
+
+{
+    "city": "Bogota",
+    "neighborhood_name": "Usme Centro",
+    "street_name": "Usminia",
+    "street_number": 23,
+    "cardinal_location": "Sur",
+    "patients": 1,
+    "establishments": null
+}
+
+#Vaccines
+POST {{URL}}/vaccines
+
+{
+    "name": "Pfiser",
+    "manufacter_date": "2022-01-15",
+    "expiration_date": "2022-04-15",
+    "vaccine_certificates": []
+}
+
+#Patients
 POST {{URL}}/patients
+Content-Type: application/json
+
+{
+    "first_name": "Dlian",
+    "last_name": "Baron",
+    "identification_number": "1034522322",
+    "identification_expedition_date": "2020-07-23",
+    "phone_number": "38827736728",
+    "email_address": "Dilan.baron79@gmail.com",
+    "addresses": [],
+    "vaccine_certificate": null
+}
+
+#Nurses
+POST {{URL}}/nurses
+Content-Type: application/json
+
+{
+    "first_name": "Sonia",
+    "last_name": "Murcia",
+    "identification_number": "923849023",
+    "identification_expedition_date": "2013-06-23",
+    "phone_number": "4427736728",
+    "email_address": "giselle.murcia@hotmail.com",
+    "nurse_rol": "Auxiliar",
+    "vaccine_certificates": null
+}
+
+#Establishments
+POST {{URL}}/establishments
+Content-Type: application/json
+
+{
+    "name": "EPS Sura",
+    "address_id": 1,
+    "contact_number": "32084234903",
+    "contact_email_address": "sura@test.com",
+    "vaccine_certificates": null
+}
+
+#Vaccine certificates
+POST {{URL}}/vaccine_certificates
+Content-Type: application/json
+
+{
+    "vaccine_id": 1,
+    "patient_id": 1,
+    "nurse_id": 1,
+    "establishment_id": 1,
+    "vaccine_application_date": "2022-05-13",
+    "next_vaccine_application_date": "2022-08-13"
+}
+
+#Administrators
+POST {{URL}}/administrators
 Content-Type: application/json
 
 {
     "first_name": "Bryan",
     "last_name": "Baron",
-    "identification_number": "1056622322",
+    "identification_number": "923849023",
     "identification_expedition_date": "2020-07-23",
-    "phone_number": "38827736728",
-    "email_address": "Bryan.baron55@gmail.com",
+    "phone_number": "92390832",
+    "email_address": "admin@test.com",
 }

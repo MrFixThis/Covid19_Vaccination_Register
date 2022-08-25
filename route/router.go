@@ -10,23 +10,23 @@ import (
 // InitializeRoutes initializes the server's routes to handle the http requests
 func InitializeRoutes() *mux.Router {
 	r := mux.NewRouter()
-	s := r.PathPrefix("api/v1").Subrouter()
+	s := r.PathPrefix("/api/v1").Subrouter()
 
 	// Address routes
-	a := s.PathPrefix("/addresses").Subrouter()
-	a.HandleFunc("", handler.CreateAddress).Methods(http.MethodPost)
-	a.HandleFunc("/addresses/{id:[0-9]+}", handler.GetAddress).Methods(http.MethodGet)
-	a.HandleFunc("/addresses/{id:[0-9]+}", handler.UpdateAddress).Methods(http.MethodPut)
-	a.HandleFunc("/addresses/{id:[0-9]+}", handler.DeleteAddress).Methods(http.MethodDelete)
-	a.HandleFunc("/addresses/", handler.GetAddresses).Methods(http.MethodGet)
+	as := s.PathPrefix("/addresses").Subrouter()
+	as.HandleFunc("", handler.CreateAddress).Methods(http.MethodPost)
+	as.HandleFunc("/{id:[0-9]+}", handler.GetAddress).Methods(http.MethodGet)
+	as.HandleFunc("/{id:[0-9]+}", handler.UpdateAddress).Methods(http.MethodPut)
+	as.HandleFunc("/{id:[0-9]+}", handler.DeleteAddress).Methods(http.MethodDelete)
+	as.HandleFunc("", handler.GetAddresses).Methods(http.MethodGet)
 
 	// Vaccine routes
-	v := s.PathPrefix("/vaccines").Subrouter()
-	v.HandleFunc("", handler.CreateVaccine).Methods(http.MethodPost)
-	v.HandleFunc("/{id:[0-9]+}", handler.GetVaccine).Methods(http.MethodGet)
-	v.HandleFunc("/{id:[0-9]+}", handler.UpdateVaccine).Methods(http.MethodPut)
-	v.HandleFunc("/{id:[0-9]+}", handler.DeleteVaccine).Methods(http.MethodDelete)
-	v.HandleFunc("", handler.GetVaccines).Methods(http.MethodGet)
+	vi := s.PathPrefix("/vaccines").Subrouter()
+	vi.HandleFunc("", handler.CreateVaccine).Methods(http.MethodPost)
+	vi.HandleFunc("/{id:[0-9]+}", handler.GetVaccine).Methods(http.MethodGet)
+	vi.HandleFunc("/{id:[0-9]+}", handler.UpdateVaccine).Methods(http.MethodPut)
+	vi.HandleFunc("/{id:[0-9]+}", handler.DeleteVaccine).Methods(http.MethodDelete)
+	vi.HandleFunc("", handler.GetVaccines).Methods(http.MethodGet)
 
 	// Patient routes
 	p := s.PathPrefix("/patients").Subrouter()
@@ -53,14 +53,19 @@ func InitializeRoutes() *mux.Router {
 	e.HandleFunc("", handler.GetEstablishments).Methods(http.MethodGet)
 
 	// Vaccine certificate routes
-	c := s.PathPrefix("/vaccine_certificate").Subrouter()
-	c.HandleFunc("", handler.CreateVaccineCertificate).Methods(http.MethodPost)
-	c.HandleFunc("/{id:[0-9]+}", handler.GetVaccineCertificate).Methods(http.MethodGet)
-	c.HandleFunc("/{id:[0-9]+}", handler.UpdateVaccineCertificate).Methods(http.MethodPut)
-	c.HandleFunc("/{id:[0-9]+}", handler.DeleteVaccineCertificate).Methods(http.MethodDelete)
-	c.HandleFunc("", handler.GetVaccineCertificates).Methods(http.MethodGet)
+	vc := s.PathPrefix("/vaccine_certificate").Subrouter()
+	vc.HandleFunc("", handler.CreateVaccineCertificate).Methods(http.MethodPost)
+	vc.HandleFunc("/{id:[0-9]+}", handler.GetVaccineCertificate).Methods(http.MethodGet)
+	vc.HandleFunc("/{id:[0-9]+}", handler.UpdateVaccineCertificate).Methods(http.MethodPut)
+	vc.HandleFunc("/{id:[0-9]+}", handler.DeleteVaccineCertificate).Methods(http.MethodDelete)
+	vc.HandleFunc("", handler.GetVaccineCertificates).Methods(http.MethodGet)
 
-	//TODO: See if it's necesary to implement the same with the administrators
+	an := s.PathPrefix("/administrators").Subrouter()
+	an.HandleFunc("", handler.CreateAdministrator).Methods(http.MethodPost)
+	an.HandleFunc("/{id:[0-9]+}", handler.GetAdministrator).Methods(http.MethodGet)
+	an.HandleFunc("/{id:[0-9]+}", handler.UpdateAdministrator).Methods(http.MethodPut)
+	an.HandleFunc("/{id:[0-9]+}", handler.DeleteAdministrator).Methods(http.MethodDelete)
+	an.HandleFunc("", handler.GetAdministrators).Methods(http.MethodGet)
 
 	return r
 }

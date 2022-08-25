@@ -1,48 +1,48 @@
 #Addresses
-GET {{URL}}/addresses
+DELETE {{URL}}/addresses
 Content-Type: application/json
 
-GET {{URL}}/addresses/1
+DELETE {{URL}}/addresses/1
 Content-Type: application/json
 
 #Vaccines
-GET {{URL}}/vaccines
+DELETE {{URL}}/vaccines
 Content-Type: application/json
 
-GET {{URL}}/vaccines/1
+DELETE {{URL}}/vaccines/1
 Content-Type: application/json
 
 #Patients
-GET {{URL}}/patients
+DELETE {{URL}}/patients
 Content-Type: patients/json
 
-GET {{URL}}/patients/1
+DELETE {{URL}}/patients/1
 Content-Type: application/json
 
 #Nurses
-GET {{URL}}/nurses
+DELETE {{URL}}/nurses
 Content-Type: application/json
 
-GET {{URL}}/nurses/1
+DELETE {{URL}}/nurses/1
 Content-Type: application/json
 
 #Establishments
-GET {{URL}}/establishments
+DELETE {{URL}}/establishments
 Content-Type: application/json
 
-GET {{URL}}/establishments/1
+DELETE {{URL}}/establishments/1
 Content-Type: application/json
 
 #Vaccine certificates
-GET {{URL}}/vaccine_certificates
+DELETE {{URL}}/vaccine_certificates
 Content-Type: application/json
 
-GET {{URL}}/vaccine_certificates/1
+DELETE {{URL}}/vaccine_certificates/1
 Content-Type: application/json
 
 #Administrators
-GET {{URL}}/administrators
+DELETE {{URL}}/administrators
 Content-Type: application/json
 
-GET {{URL}}/administrators/1
+DELETE {{URL}}/administrators/1
 Content-Type: application/json

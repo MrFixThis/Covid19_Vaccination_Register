@@ -15,23 +15,23 @@ import (
 func CreateNurse(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	var nurse model.Nurse
+	var n model.Nurse
 
-	json.NewDecoder(r.Body).Decode(&nurse)
-	database.DB.Create(&nurse)
+	json.NewDecoder(r.Body).Decode(&n)
+	database.DB.Create(&n)
 
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(&nurse)
+	json.NewEncoder(w).Encode(&n)
 }
 
 // GetNurse gets an id-specified Nurse object from the database
 func GetNurse(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	var nurse model.Nurse
+	var n model.Nurse
 	v := mux.Vars(r)
 
-	tx := database.DB.First(&nurse, v["id"])
+	tx := database.DB.First(&n, v["id"])
 	if tx.Error != nil {
 		if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
 			http.Error(w, tx.Error.Error(), http.StatusNotFound)
@@ -40,17 +40,17 @@ func GetNurse(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(&nurse)
+	json.NewEncoder(w).Encode(&n)
 }
 
 // UpdateNurse updates an id-specified Nurse object
 func UpdateNurse(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	var nurse model.Nurse
+	var n model.Nurse
 	v := mux.Vars(r)
 
-	tx := database.DB.First(&nurse, v["id"])
+	tx := database.DB.First(&n, v["id"])
 	if tx.Error != nil {
 		status := http.StatusInternalServerError
 		if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
@@ -59,37 +59,41 @@ func UpdateNurse(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, tx.Error.Error(), status)
 		return
 	}
-	json.NewDecoder(r.Body).Decode(&nurse)
+	json.NewDecoder(r.Body).Decode(&n)
 
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(&nurse)
+	json.NewEncoder(w).Encode(&n)
 }
 
 // DeleteNurse deletes an id-specified Nurse object
 func DeleteNurse(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	var nurse model.Nurse
+	var n model.Nurse
 	v := mux.Vars(r)
 
-	json.NewDecoder(r.Body).Decode(&nurse)
-	err := database.DB.Delete(&nurse, v["id"])
-	if err != nil {
-		http.Error(w, err.Error.Error(), http.StatusInternalServerError)
+	tx := database.DB.First(&n, v["id"])
+	if tx.Error != nil {
+		status := http.StatusInternalServerError
+		if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
+			status = http.StatusOK
+		}
+		http.Error(w, tx.Error.Error(), status)
 		return
 	}
+	database.DB.Delete(&n)
 
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode("nurse deleted successfully")
+	json.NewEncoder(w).Encode("n deleted successfully")
 }
 
 // GetNursees gets all the Nurse abjects from the database
 func GetNurses(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
-	var nurses []model.Nurse
-	database.DB.Find(&nurses)
+	var ns []model.Nurse
+	database.DB.Find(&ns)
 
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(&nurses)
+	json.NewEncoder(w).Encode(&ns)
 }
