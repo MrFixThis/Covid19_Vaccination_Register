@@ -33,9 +33,11 @@ func GetPatient(w http.ResponseWriter, r *http.Request) {
 
 	tx := database.DB.First(&p, v["id"])
 	if tx.Error != nil {
+		s := http.StatusInternalServerError
 		if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
-			http.Error(w, tx.Error.Error(), http.StatusNotFound)
+			s = http.StatusNotFound
 		}
+		http.Error(w, tx.Error.Error(), s)
 		return
 	}
 
@@ -52,14 +54,15 @@ func UpdatePatient(w http.ResponseWriter, r *http.Request) {
 
 	tx := database.DB.First(&p, v["id"])
 	if tx.Error != nil {
-		status := http.StatusInternalServerError
+		s := http.StatusInternalServerError
 		if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
-			status = http.StatusNotFound
+			s = http.StatusNotFound
 		}
-		http.Error(w, tx.Error.Error(), status)
+		http.Error(w, tx.Error.Error(), s)
 		return
 	}
 	json.NewDecoder(r.Body).Decode(&p)
+	database.DB.Save(&p)
 
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(&p)
@@ -74,17 +77,16 @@ func DeletePatient(w http.ResponseWriter, r *http.Request) {
 
 	tx := database.DB.First(&p, v["id"])
 	if tx.Error != nil {
-		status := http.StatusInternalServerError
+		s := http.StatusInternalServerError
 		if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
-			status = http.StatusOK
+			s = http.StatusNotFound
 		}
-		http.Error(w, tx.Error.Error(), status)
+		http.Error(w, tx.Error.Error(), s)
 		return
 	}
 	database.DB.Delete(&p)
 
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode("n deleted successfully")
+	w.WriteHeader(http.StatusNoContent)
 }
 
 // GetPatientes gets all the Patient abjects from the database

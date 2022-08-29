@@ -1,29 +1,30 @@
 #Address
-PUT {{URL}}/addresses
+PUT {{URL}}/addresses/2
 Content-Type: application/json
 
 {
     "city": "Medellin",
     "neighborhood_name": "Comuna 13",
     "street_name": "hueco",
-    "street_number": 23,
+    "street_number": "25",
     "cardinal_location": "Sur",
     "patients": 1,
     "establishments": null
 }
 
 #Vaccines
-PUT {{URL}}/vaccines
+PUT {{URL}}/vaccines/1
+Content-Type: application/json
 
 {
     "name": "Moderna",
     "manufacter_date": "2022-02-16",
     "expiration_date": "2022-05-16",
-    "vaccine_certificates": []
+    "vaccine_certificates": null
 }
 
 #Patients
-PUT {{URL}}/patients
+PUT {{URL}}/patients/6
 Content-Type: application/json
 
 {
@@ -38,7 +39,7 @@ Content-Type: application/json
 }
 
 #Nurses
-PUT {{URL}}/nurses
+PUT {{URL}}/nurses/1
 Content-Type: application/json
 
 {
@@ -53,19 +54,19 @@ Content-Type: application/json
 }
 
 #Establishments
-PUT {{URL}}/establishments
+PUT {{URL}}/establishments/1
 Content-Type: application/json
 
 {
     "name": "EPS Sanitas",
-    "address_id": 1,
+    "address_id": 2,
     "contact_number": "239403829048",
     "contact_email_address": "sanitas@test.com",
     "vaccine_certificates": null
 }
 
 #Vaccine certificates
-PUT {{URL}}/vaccine_certificates
+PUT {{URL}}/vaccine_certificates/1
 Content-Type: application/json
 
 {
@@ -78,14 +79,11 @@ Content-Type: application/json
 }
 
 #Administrators
-PUT {{URL}}/administrators
+PUT {{URL}}/administrators/2
 Content-Type: application/json
 
 {
-    "first_name": "MrFixThis",
-    "last_name": "admin",
-    "identification_number": "923849023",
-    "identification_expedition_date": "2020-07-23",
-    "phone_number": "92390832",
-    "email_address": "admin@test.com",
+    "admin_name": "BryanBaron",
+#    "password": "GoIsLife!",
+    "is_master": true
 }

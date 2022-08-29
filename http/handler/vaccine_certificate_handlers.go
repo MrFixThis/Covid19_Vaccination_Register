@@ -33,9 +33,11 @@ func GetVaccineCertificate(w http.ResponseWriter, r *http.Request) {
 
 	tx := database.DB.First(&vc, v["id"])
 	if tx.Error != nil {
+		s := http.StatusInternalServerError
 		if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
-			http.Error(w, tx.Error.Error(), http.StatusNotFound)
+			s = http.StatusNotFound
 		}
+		http.Error(w, tx.Error.Error(), s)
 		return
 	}
 
@@ -52,14 +54,15 @@ func UpdateVaccineCertificate(w http.ResponseWriter, r *http.Request) {
 
 	tx := database.DB.First(&vc, v["id"])
 	if tx.Error != nil {
-		status := http.StatusInternalServerError
+		s := http.StatusInternalServerError
 		if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
-			status = http.StatusNotFound
+			s = http.StatusNotFound
 		}
-		http.Error(w, tx.Error.Error(), status)
+		http.Error(w, tx.Error.Error(), s)
 		return
 	}
 	json.NewDecoder(r.Body).Decode(&vc)
+	database.DB.Save(&vc)
 
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(&vc)
@@ -74,17 +77,16 @@ func DeleteVaccineCertificate(w http.ResponseWriter, r *http.Request) {
 
 	tx := database.DB.First(&vc, v["id"])
 	if tx.Error != nil {
-		status := http.StatusInternalServerError
+		s := http.StatusInternalServerError
 		if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
-			status = http.StatusOK
+			s = http.StatusNotFound
 		}
-		http.Error(w, tx.Error.Error(), status)
+		http.Error(w, tx.Error.Error(), s)
 		return
 	}
 	database.DB.Delete(&vc)
 
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode("n deleted successfully")
+	w.WriteHeader(http.StatusNoContent)
 }
 
 // GetVaccineCertificatees gets all the VaccineCertificate abjects from the database

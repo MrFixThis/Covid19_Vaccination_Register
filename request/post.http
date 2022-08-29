@@ -6,7 +6,7 @@ Content-Type: application/json
     "city": "Bogota",
     "neighborhood_name": "Usme Centro",
     "street_name": "Usminia",
-    "street_number": 23,
+    "street_number": "23",
     "cardinal_location": "Sur",
     "patients": 1,
     "establishments": null
@@ -14,12 +14,13 @@ Content-Type: application/json
 
 #Vaccines
 POST {{URL}}/vaccines
+Content-Type: application/json
 
 {
     "name": "Pfiser",
     "manufacter_date": "2022-01-15",
     "expiration_date": "2022-04-15",
-    "vaccine_certificates": []
+    "vaccine_certificates": null
 }
 
 #Patients
@@ -41,8 +42,7 @@ Content-Type: application/json
 POST {{URL}}/nurses
 Content-Type: application/json
 
-{
-    "first_name": "Sonia",
+{ "first_name": "Sonia",
     "last_name": "Murcia",
     "identification_number": "923849023",
     "identification_expedition_date": "2013-06-23",
@@ -82,10 +82,7 @@ POST {{URL}}/administrators
 Content-Type: application/json
 
 {
-    "first_name": "Bryan",
-    "last_name": "Baron",
-    "identification_number": "923849023",
-    "identification_expedition_date": "2020-07-23",
-    "phone_number": "92390832",
-    "email_address": "admin@test.com",
+    "admin_name": "TEST",
+    "password": "abcdef",
+    "is_master": false
 }

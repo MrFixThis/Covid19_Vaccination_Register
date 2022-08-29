@@ -2,23 +2,25 @@ package route
 
 import (
 	"net/http"
+	"os"
 
-	"github.com/Covid19_Vaccination_Register/route/handler"
+	"github.com/Covid19_Vaccination_Register/http/handler"
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
 
 // InitializeRoutes initializes the server's routes to handle the http requests
-func InitializeRoutes() *mux.Router {
+func InitializeRoutes() http.Handler {
 	r := mux.NewRouter()
 	s := r.PathPrefix("/api/v1").Subrouter()
 
 	// Address routes
-	as := s.PathPrefix("/addresses").Subrouter()
-	as.HandleFunc("", handler.CreateAddress).Methods(http.MethodPost)
-	as.HandleFunc("/{id:[0-9]+}", handler.GetAddress).Methods(http.MethodGet)
-	as.HandleFunc("/{id:[0-9]+}", handler.UpdateAddress).Methods(http.MethodPut)
-	as.HandleFunc("/{id:[0-9]+}", handler.DeleteAddress).Methods(http.MethodDelete)
-	as.HandleFunc("", handler.GetAddresses).Methods(http.MethodGet)
+	ad := s.PathPrefix("/addresses").Subrouter()
+	ad.HandleFunc("", handler.CreateAddress).Methods(http.MethodPost)
+	ad.HandleFunc("/{id:[0-9]+}", handler.GetAddress).Methods(http.MethodGet)
+	ad.HandleFunc("/{id:[0-9]+}", handler.UpdateAddress).Methods(http.MethodPut)
+	ad.HandleFunc("/{id:[0-9]+}", handler.DeleteAddress).Methods(http.MethodDelete)
+	ad.HandleFunc("", handler.GetAddresses).Methods(http.MethodGet)
 
 	// Vaccine routes
 	vi := s.PathPrefix("/vaccines").Subrouter()
@@ -53,19 +55,19 @@ func InitializeRoutes() *mux.Router {
 	e.HandleFunc("", handler.GetEstablishments).Methods(http.MethodGet)
 
 	// Vaccine certificate routes
-	vc := s.PathPrefix("/vaccine_certificate").Subrouter()
+	vc := s.PathPrefix("/vaccine_certificates").Subrouter()
 	vc.HandleFunc("", handler.CreateVaccineCertificate).Methods(http.MethodPost)
 	vc.HandleFunc("/{id:[0-9]+}", handler.GetVaccineCertificate).Methods(http.MethodGet)
 	vc.HandleFunc("/{id:[0-9]+}", handler.UpdateVaccineCertificate).Methods(http.MethodPut)
 	vc.HandleFunc("/{id:[0-9]+}", handler.DeleteVaccineCertificate).Methods(http.MethodDelete)
 	vc.HandleFunc("", handler.GetVaccineCertificates).Methods(http.MethodGet)
 
-	an := s.PathPrefix("/administrators").Subrouter()
-	an.HandleFunc("", handler.CreateAdministrator).Methods(http.MethodPost)
-	an.HandleFunc("/{id:[0-9]+}", handler.GetAdministrator).Methods(http.MethodGet)
-	an.HandleFunc("/{id:[0-9]+}", handler.UpdateAdministrator).Methods(http.MethodPut)
-	an.HandleFunc("/{id:[0-9]+}", handler.DeleteAdministrator).Methods(http.MethodDelete)
-	an.HandleFunc("", handler.GetAdministrators).Methods(http.MethodGet)
+	ar := s.PathPrefix("/administrators").Subrouter()
+	ar.HandleFunc("", handler.CreateAdministrator).Methods(http.MethodPost)
+	ar.HandleFunc("/{id:[0-9]+}", handler.GetAdministrator).Methods(http.MethodGet)
+	ar.HandleFunc("/{id:[0-9]+}", handler.UpdateAdministrator).Methods(http.MethodPut)
+	ar.HandleFunc("/{id:[0-9]+}", handler.DeleteAdministrator).Methods(http.MethodDelete)
+	ar.HandleFunc("", handler.GetAdministrators).Methods(http.MethodGet)
 
-	return r
+	return handlers.LoggingHandler(os.Stdout, r)
 }

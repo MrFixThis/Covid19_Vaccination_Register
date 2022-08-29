@@ -1,0 +1,27 @@
+#Addresses
+DELETE {{URL}}/addresses/2
+Content-Type: application/json
+
+#Vaccines
+DELETE {{URL}}/vaccines/1
+Content-Type: application/json
+
+#Patients
+DELETE {{URL}}/patients/6
+Content-Type: application/json
+
+#Nurses
+DELETE {{URL}}/nurses/1
+Content-Type: application/json
+
+#Establishments
+DELETE {{URL}}/establishments/1
+Content-Type: application/json
+
+#Vaccine certificates
+DELETE {{URL}}/vaccine_certificates/1
+Content-Type: application/json
+
+#Administrators
+DELETE {{URL}}/administrators/3
+Content-Type: application/json

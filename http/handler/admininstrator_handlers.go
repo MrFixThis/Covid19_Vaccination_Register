@@ -18,7 +18,7 @@ func CreateAdministrator(w http.ResponseWriter, r *http.Request) {
 	var ar model.Administrator
 
 	json.NewDecoder(r.Body).Decode(&ar)
-	database.DB.Create(&ar)
+	database.DB.Create(&ar); ar.Password = ""
 
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(&ar)
@@ -31,11 +31,13 @@ func GetAdministrator(w http.ResponseWriter, r *http.Request) {
 	var ar model.Administrator
 	v := mux.Vars(r)
 
-	tx := database.DB.First(&ar, v["id"])
+	tx := database.DB.Omit("password").First(&ar, v["id"])
 	if tx.Error != nil {
+		s := http.StatusInternalServerError
 		if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
-			http.Error(w, tx.Error.Error(), http.StatusNotFound)
+			s = http.StatusNotFound
 		}
+		http.Error(w, tx.Error.Error(), s)
 		return
 	}
 
@@ -52,14 +54,15 @@ func UpdateAdministrator(w http.ResponseWriter, r *http.Request) {
 
 	tx := database.DB.First(&ar, v["id"])
 	if tx.Error != nil {
-		status := http.StatusInternalServerError
+		s := http.StatusInternalServerError
 		if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
-			status = http.StatusNotFound
+			s = http.StatusNotFound
 		}
-		http.Error(w, tx.Error.Error(), status)
+		http.Error(w, tx.Error.Error(), s)
 		return
 	}
 	json.NewDecoder(r.Body).Decode(&ar)
+	database.DB.Save(&ar); ar.Password = ""
 
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(&ar)
@@ -74,17 +77,16 @@ func DeleteAdministrator(w http.ResponseWriter, r *http.Request) {
 
 	tx := database.DB.First(&ar, v["id"])
 	if tx.Error != nil {
-		status := http.StatusInternalServerError
+		s := http.StatusInternalServerError
 		if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
-			status = http.StatusOK
+			s = http.StatusNotFound
 		}
-		http.Error(w, tx.Error.Error(), status)
+		http.Error(w, tx.Error.Error(), s)
 		return
 	}
 	database.DB.Delete(&ar)
 
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode("n deleted successfully")
+	w.WriteHeader(http.StatusNoContent)
 }
 
 // GetAdministratores gets all the Administrator abjects from the database
@@ -92,7 +94,7 @@ func GetAdministrators(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	var ars []model.Administrator
-	database.DB.Find(&ars)
+	database.DB.Omit("password").Find(&ars)
 
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(&ars)

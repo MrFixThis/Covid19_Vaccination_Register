@@ -33,9 +33,11 @@ func GetAddress(w http.ResponseWriter, r *http.Request) {
 
 	tx := database.DB.First(&ad, v["id"])
 	if tx.Error != nil {
+		s := http.StatusInternalServerError
 		if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
-			http.Error(w, tx.Error.Error(), http.StatusNotFound)
+			s = http.StatusNotFound
 		}
+		http.Error(w, tx.Error.Error(), s)
 		return
 	}
 
@@ -52,14 +54,15 @@ func UpdateAddress(w http.ResponseWriter, r *http.Request) {
 
 	tx := database.DB.First(&ad, v["id"])
 	if tx.Error != nil {
-		status := http.StatusInternalServerError
+		s := http.StatusInternalServerError
 		if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
-			status = http.StatusNotFound
+			s = http.StatusNotFound
 		}
-		http.Error(w, tx.Error.Error(), status)
+		http.Error(w, tx.Error.Error(), s)
 		return
 	}
 	json.NewDecoder(r.Body).Decode(&ad)
+	database.DB.Save(&ad)
 
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(&ad)
@@ -74,17 +77,16 @@ func DeleteAddress(w http.ResponseWriter, r *http.Request) {
 
 	tx := database.DB.First(&ad, v["id"])
 	if tx.Error != nil {
-		status := http.StatusInternalServerError
+		s := http.StatusInternalServerError
 		if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
-			status = http.StatusOK
+			s = http.StatusNotFound
 		}
-		http.Error(w, tx.Error.Error(), status)
+		http.Error(w, tx.Error.Error(), s)
 		return
 	}
 	database.DB.Delete(&ad)
 
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode("ad deleted successfully")
+	w.WriteHeader(http.StatusNoContent)
 }
 
 // GetAddresses gets all the Address abjects from the database
@@ -92,8 +94,8 @@ func GetAddresses(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	var ads []model.Address
-	database.DB.Find(&ades)
+	database.DB.Find(&ads)
 
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(&ades)
+	json.NewEncoder(w).Encode(&ads)
 }
