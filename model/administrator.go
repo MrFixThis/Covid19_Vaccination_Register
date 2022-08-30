@@ -10,7 +10,7 @@ type Administrator struct {
 	gorm.Model
 	AdminName string `gorm:"unique" json:"admin_name"`
 	Password  string `gorm:"size:255" json:"password,omitempty"`
-	IsMaster  bool   `json:"is_master"`
+	IsMaster  bool   `json:"-"`
 }
 
 func (a *Administrator) BeforeSave(tx *gorm.DB) (err error) {
