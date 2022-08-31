@@ -2,6 +2,6 @@ package model
 
 type Nurse struct {
 	Person
-	NurseRol            string               `json:"nurse_rol"`
+	NurseRole           string               `json:"nurse_role"`
 	VaccineCertificates []VaccineCertificate `json:"vaccine_certificates"`
 }

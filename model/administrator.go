@@ -19,7 +19,7 @@ func (a *Administrator) BeforeSave(tx *gorm.DB) (err error) {
 	r := tx.First(&ar, a.ID).Error
 
 	switch {
-	case r != nil, a.Password != ar.Password:
+	case r != nil, (ar.Password != "" && a.Password != ar.Password):
 		h, err := encryptPassword(a.Password)
 		if err != nil {
 			return err
