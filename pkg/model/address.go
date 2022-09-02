@@ -10,5 +10,5 @@ type Address struct {
 	StreetNumber     string        `json:"street_number"`
 	CardinalLocation string        `json:"cardinal_location"`
 	PatientID        uint          `json:"patient_id"`
-	Establishment    Establishment `json:"establishment"`
+	Establishment    Establishment `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;" json:"establishment"`
 }

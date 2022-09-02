@@ -5,10 +5,11 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/Covid19_Vaccination_Register/database"
-	"github.com/Covid19_Vaccination_Register/model"
+	"github.com/Covid19_Vaccination_Register/pkg/model"
+	"github.com/Covid19_Vaccination_Register/pkg/storage"
 	"github.com/gorilla/mux"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 // CreateNurse creates a new Nurse object to the database
@@ -18,7 +19,7 @@ func CreateNurse(w http.ResponseWriter, r *http.Request) {
 	var n model.Nurse
 
 	json.NewDecoder(r.Body).Decode(&n)
-	database.DB.Create(&n)
+	storage.DB.Create(&n)
 
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(&n)
@@ -31,7 +32,7 @@ func GetNurse(w http.ResponseWriter, r *http.Request) {
 	var n model.Nurse
 	v := mux.Vars(r)
 
-	tx := database.DB.First(&n, v["id"])
+	tx := storage.DB.Preload(clause.Associations).First(&n, v["id"])
 	if tx.Error != nil {
 		s := http.StatusInternalServerError
 		if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
@@ -52,7 +53,7 @@ func UpdateNurse(w http.ResponseWriter, r *http.Request) {
 	var n model.Nurse
 	v := mux.Vars(r)
 
-	tx := database.DB.First(&n, v["id"])
+	tx := storage.DB.Preload(clause.Associations).First(&n, v["id"])
 	if tx.Error != nil {
 		s := http.StatusInternalServerError
 		if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
@@ -62,7 +63,7 @@ func UpdateNurse(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	json.NewDecoder(r.Body).Decode(&n)
-	database.DB.Save(&n)
+	storage.DB.Save(&n)
 
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(&n)
@@ -75,7 +76,7 @@ func DeleteNurse(w http.ResponseWriter, r *http.Request) {
 	var n model.Nurse
 	v := mux.Vars(r)
 
-	tx := database.DB.First(&n, v["id"])
+	tx := storage.DB.First(&n, v["id"])
 	if tx.Error != nil {
 		s := http.StatusInternalServerError
 		if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
@@ -84,7 +85,7 @@ func DeleteNurse(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, tx.Error.Error(), s)
 		return
 	}
-	database.DB.Delete(&n)
+	storage.DB.Delete(&n)
 
 	w.WriteHeader(http.StatusNoContent)
 }
@@ -94,7 +95,7 @@ func GetNurses(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	var ns []model.Nurse
-	database.DB.Find(&ns)
+	storage.DB.Preload(clause.Associations).Find(&ns)
 
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(&ns)

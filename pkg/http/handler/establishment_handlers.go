@@ -5,10 +5,11 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/Covid19_Vaccination_Register/database"
-	"github.com/Covid19_Vaccination_Register/model"
+	"github.com/Covid19_Vaccination_Register/pkg/model"
+	"github.com/Covid19_Vaccination_Register/pkg/storage"
 	"github.com/gorilla/mux"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 // CreateEstablishment creates a new Establishment object to the database
@@ -18,7 +19,7 @@ func CreateEstablishment(w http.ResponseWriter, r *http.Request) {
 	var e model.Establishment
 
 	json.NewDecoder(r.Body).Decode(&e)
-	database.DB.Create(&e)
+	storage.DB.Create(&e)
 
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(&e)
@@ -31,7 +32,7 @@ func GetEstablishment(w http.ResponseWriter, r *http.Request) {
 	var e model.Establishment
 	v := mux.Vars(r)
 
-	tx := database.DB.First(&e, v["id"])
+	tx := storage.DB.Preload(clause.Associations).First(&e, v["id"])
 	if tx.Error != nil {
 		s := http.StatusInternalServerError
 		if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
@@ -52,7 +53,7 @@ func UpdateEstablishment(w http.ResponseWriter, r *http.Request) {
 	var e model.Establishment
 	v := mux.Vars(r)
 
-	tx := database.DB.First(&e, v["id"])
+	tx := storage.DB.Preload(clause.Associations).First(&e, v["id"])
 	if tx.Error != nil {
 		s := http.StatusInternalServerError
 		if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
@@ -62,7 +63,7 @@ func UpdateEstablishment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	json.NewDecoder(r.Body).Decode(&e)
-	database.DB.Save(&e)
+	storage.DB.Save(&e)
 
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(&e)
@@ -75,7 +76,7 @@ func DeleteEstablishment(w http.ResponseWriter, r *http.Request) {
 	var e model.Establishment
 	v := mux.Vars(r)
 
-	tx := database.DB.First(&e, v["id"])
+	tx := storage.DB.First(&e, v["id"])
 	if tx.Error != nil {
 		s := http.StatusInternalServerError
 		if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
@@ -84,7 +85,7 @@ func DeleteEstablishment(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, tx.Error.Error(), s)
 		return
 	}
-	database.DB.Delete(&e)
+	storage.DB.Delete(&e)
 
 	w.WriteHeader(http.StatusNoContent)
 }
@@ -94,7 +95,7 @@ func GetEstablishments(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	var es []model.Establishment
-	database.DB.Find(&es)
+	storage.DB.Preload(clause.Associations).Find(&es)
 
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(&es)

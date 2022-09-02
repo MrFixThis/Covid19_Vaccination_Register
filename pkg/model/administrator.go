@@ -3,7 +3,6 @@ package model
 import (
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
 )
 
 type Administrator struct {
@@ -14,7 +13,6 @@ type Administrator struct {
 }
 
 func (a *Administrator) BeforeSave(tx *gorm.DB) (err error) {
-	tx = tx.Session(&gorm.Session{Logger: logger.Default.LogMode(logger.Silent)})
 	var ar Administrator
 	r := tx.First(&ar, a.ID).Error
 

@@ -1,7 +1,7 @@
-package database
+package storage
 
 import (
-	"github.com/Covid19_Vaccination_Register/model"
+	"github.com/Covid19_Vaccination_Register/pkg/model"
 )
 
 func migrateSchema() {

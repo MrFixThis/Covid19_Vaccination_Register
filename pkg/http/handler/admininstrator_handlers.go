@@ -5,8 +5,8 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/Covid19_Vaccination_Register/database"
-	"github.com/Covid19_Vaccination_Register/model"
+	"github.com/Covid19_Vaccination_Register/pkg/storage"
+	"github.com/Covid19_Vaccination_Register/pkg/model"
 	"github.com/gorilla/mux"
 	"gorm.io/gorm"
 )
@@ -18,7 +18,7 @@ func CreateAdministrator(w http.ResponseWriter, r *http.Request) {
 	var ar model.Administrator
 
 	json.NewDecoder(r.Body).Decode(&ar)
-	database.DB.Create(&ar); ar.Password = ""
+	storage.DB.Create(&ar); ar.Password = ""
 
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(&ar)
@@ -31,7 +31,7 @@ func GetAdministrator(w http.ResponseWriter, r *http.Request) {
 	var ar model.Administrator
 	v := mux.Vars(r)
 
-	tx := database.DB.Omit("password").First(&ar, v["id"])
+	tx := storage.DB.Omit("password").First(&ar, v["id"])
 	if tx.Error != nil {
 		s := http.StatusInternalServerError
 		if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
@@ -52,7 +52,7 @@ func UpdateAdministrator(w http.ResponseWriter, r *http.Request) {
 	var ar model.Administrator
 	v := mux.Vars(r)
 
-	tx := database.DB.First(&ar, v["id"])
+	tx := storage.DB.First(&ar, v["id"])
 	if tx.Error != nil {
 		s := http.StatusInternalServerError
 		if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
@@ -62,7 +62,7 @@ func UpdateAdministrator(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	json.NewDecoder(r.Body).Decode(&ar)
-	database.DB.Save(&ar); ar.Password = ""
+	storage.DB.Save(&ar); ar.Password = ""
 
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(&ar)
@@ -75,7 +75,7 @@ func DeleteAdministrator(w http.ResponseWriter, r *http.Request) {
 	var ar model.Administrator
 	v := mux.Vars(r)
 
-	tx := database.DB.First(&ar, v["id"])
+	tx := storage.DB.First(&ar, v["id"])
 	if tx.Error != nil {
 		s := http.StatusInternalServerError
 		if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
@@ -84,7 +84,7 @@ func DeleteAdministrator(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, tx.Error.Error(), s)
 		return
 	}
-	database.DB.Delete(&ar)
+	storage.DB.Delete(&ar)
 
 	w.WriteHeader(http.StatusNoContent)
 }
@@ -94,7 +94,7 @@ func GetAdministrators(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	var ars []model.Administrator
-	database.DB.Omit("password").Find(&ars)
+	storage.DB.Omit("password").Find(&ars)
 
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(&ars)

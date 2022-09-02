@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/Covid19_Vaccination_Register/http/handler"
+	"github.com/Covid19_Vaccination_Register/pkg/http/handler"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )

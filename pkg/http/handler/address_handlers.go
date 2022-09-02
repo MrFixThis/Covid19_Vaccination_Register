@@ -5,10 +5,11 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/Covid19_Vaccination_Register/database"
-	"github.com/Covid19_Vaccination_Register/model"
+	"github.com/Covid19_Vaccination_Register/pkg/storage"
+	"github.com/Covid19_Vaccination_Register/pkg/model"
 	"github.com/gorilla/mux"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 // CreateAddress creates a new Address object to the database
@@ -18,7 +19,7 @@ func CreateAddress(w http.ResponseWriter, r *http.Request) {
 	var ad model.Address
 
 	json.NewDecoder(r.Body).Decode(&ad)
-	database.DB.Create(&ad)
+	storage.DB.Create(&ad)
 
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(&ad)
@@ -31,7 +32,7 @@ func GetAddress(w http.ResponseWriter, r *http.Request) {
 	var ad model.Address
 	v := mux.Vars(r)
 
-	tx := database.DB.First(&ad, v["id"])
+	tx := storage.DB.Preload(clause.Associations).First(&ad, v["id"])
 	if tx.Error != nil {
 		s := http.StatusInternalServerError
 		if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
@@ -52,7 +53,7 @@ func UpdateAddress(w http.ResponseWriter, r *http.Request) {
 	var ad model.Address
 	v := mux.Vars(r)
 
-	tx := database.DB.First(&ad, v["id"])
+	tx := storage.DB.Preload(clause.Associations).First(&ad, v["id"])
 	if tx.Error != nil {
 		s := http.StatusInternalServerError
 		if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
@@ -62,7 +63,7 @@ func UpdateAddress(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	json.NewDecoder(r.Body).Decode(&ad)
-	database.DB.Save(&ad)
+	storage.DB.Save(&ad)
 
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(&ad)
@@ -75,7 +76,7 @@ func DeleteAddress(w http.ResponseWriter, r *http.Request) {
 	var ad model.Address
 	v := mux.Vars(r)
 
-	tx := database.DB.First(&ad, v["id"])
+	tx := storage.DB.First(&ad, v["id"])
 	if tx.Error != nil {
 		s := http.StatusInternalServerError
 		if errors.Is(tx.Error, gorm.ErrRecordNotFound) {
@@ -84,7 +85,7 @@ func DeleteAddress(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, tx.Error.Error(), s)
 		return
 	}
-	database.DB.Delete(&ad)
+	storage.DB.Delete(&ad)
 
 	w.WriteHeader(http.StatusNoContent)
 }
@@ -94,7 +95,7 @@ func GetAddresses(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	var ads []model.Address
-	database.DB.Find(&ads)
+	storage.DB.Preload(clause.Associations).Find(&ads)
 
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(&ads)
