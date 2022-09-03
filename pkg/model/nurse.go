@@ -1,14 +1,10 @@
 package model
 
 // NurseRole type refers to the unique role that a nurse must have
+// 1: Auxiliar
+// 2: Vaccinator
+// 3: Boss
 type NurseRole int
-
-// Nurse roles enum
-const (
-	Auxiliar NurseRole = iota
-	Vaccinator
-	Boss
-)
 
 type Nurse struct {
 	Person
