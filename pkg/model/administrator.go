@@ -12,12 +12,15 @@ type Administrator struct {
 	IsMaster  bool   `json:"-"`
 }
 
+// BeforeSave hook encrypts the administrator's password before saving it in
+// the database. If the administrator alredy exists in the database but its
+// fields has a new value, then an update will be made, encripting the new
+// password if it was changed
 func (a *Administrator) BeforeSave(tx *gorm.DB) (err error) {
 	var ar Administrator
 	r := tx.First(&ar, a.ID).Error
 
-	switch {
-	case r != nil, (ar.Password != "" && a.Password != ar.Password):
+	if r != nil || (ar.Password != "" && ar.Password != a.Password) {
 		h, err := encryptPassword(a.Password)
 		if err != nil {
 			return err
@@ -28,7 +31,7 @@ func (a *Administrator) BeforeSave(tx *gorm.DB) (err error) {
 }
 
 // encryptPassword encrypts a given string password and returns its hash and
-// a possible error value
+// a possible error result
 func encryptPassword(rp string) (h string, err error) {
 	hb, err := bcrypt.GenerateFromPassword([]byte(rp), bcrypt.DefaultCost)
 	return string(hb), err
